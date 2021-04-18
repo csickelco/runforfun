@@ -21,5 +21,5 @@ html = """\
 """
 
 print("Running for runforfun...")
-emailer.send_email(sender_email, receiver_email, password, text, html)
+emailer.send_email(sender_email, receiver_email, password, "Run Reminder", text, html)
 print("Successfully completed runforfun")

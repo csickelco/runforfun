@@ -6,9 +6,9 @@ PORT = 465  # For SSL
 SMTP_SERVER = "smtp.gmail.com"
 
 
-def send_email(sender_email, receiver_email, password, text, html):
+def send_email(sender_email, receiver_email, password, subject, text, html):
     message = MIMEMultipart("alternative")
-    message["Subject"] = "multipart test"
+    message["Subject"] = subject
     message["From"] = sender_email
     message["To"] = receiver_email
 
