@@ -4,10 +4,11 @@ from api import sunrise_sunset
 from api import weather
 from dao import training_plan_dao
 from dao import dress_my_run_dao
+from dao import routes_dao
 import datetime
 
-if len(sys.argv) < 7:
-    print("Usage: python3 runforfun/runforfun.py {send_email_address} {receiver_email} {password} {trainingPlan} {dressRules} {weatherAPIKey}")
+if len(sys.argv) < 8:
+    print("Usage: python3 runforfun/runforfun.py {send_email_address} {receiver_email} {password} {trainingPlan} {dressRules} {routes} {weatherAPIKey}")
     sys.exit(0)
 
 sender_email = sys.argv[1]
@@ -15,7 +16,8 @@ receiver_email = sys.argv[2]
 password = sys.argv[3]
 training_plan = sys.argv[4]
 dress_rules = sys.argv[5]
-weather_api_key = sys.argv[6]
+routes = sys.argv[6]
+weather_api_key = sys.argv[7]
 
 latitude = "43.161030"
 longitude = "-77.610924"
@@ -31,6 +33,7 @@ if workout is None:
 else:
     forecast = weather.get_weather(weather_api_key, latitude, longitude, workout.workout_date_time)
     dress = dress_my_run_dao.get_dress_for_weather(dress_rules, forecast.temp)
+    routes = routes_dao.get_suggested_routes(routes, workout.distance)
 
     # Create the plain-text and HTML version of your message
     text = """\
@@ -39,12 +42,13 @@ else:
     <html>
       <body>
         <p>This is your run reminder from runforfun!</p>
-        <p><b>Workout:</b></p>
+        <p><b>What to Run:</b></p>
         <ul>
             <li>Distance: {workout.distance} miles</li>
             <li>Duration: {workout.duration} minutes</li>
             <li>Time: {workout.workout_date_time}</li>
             <li>Notes: {workout.notes}</li>
+            <li>Route(s): <a href="{routes[0].name}">{routes[0].name} ({routes[0].distance} miles)</a>
         </ul>
         <p><b>What to Wear:</b></p>
         <p>{dress.dress_items}</p>
