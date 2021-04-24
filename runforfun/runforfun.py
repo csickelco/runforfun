@@ -3,17 +3,19 @@ from util import emailer
 from api import sunrise_sunset
 from api import weather
 from dao import training_plan_dao
+from dao import dress_my_run_dao
 import datetime
 
-if len(sys.argv) < 6:
-    print("Usage: python3 runforfun/runforfun.py {send_email_address} {receiver_email} {password} {trainingPlan} {weatherAPIKey}")
+if len(sys.argv) < 7:
+    print("Usage: python3 runforfun/runforfun.py {send_email_address} {receiver_email} {password} {trainingPlan} {dressRules} {weatherAPIKey}")
     sys.exit(0)
 
 sender_email = sys.argv[1]
 receiver_email = sys.argv[2]
 password = sys.argv[3]
 training_plan = sys.argv[4]
-weather_api_key = sys.argv[5]
+dress_rules = sys.argv[5]
+weather_api_key = sys.argv[6]
 
 latitude = "43.161030"
 longitude = "-77.610924"
@@ -28,6 +30,7 @@ if workout is None:
     print('No planned workout for tomorrow')
 else:
     forecast = weather.get_weather(weather_api_key, latitude, longitude, workout.workout_date_time)
+    dress = dress_my_run_dao.get_dress_for_weather(dress_rules, forecast.temp)
 
     # Create the plain-text and HTML version of your message
     text = """\
@@ -43,6 +46,9 @@ else:
             <li>Time: {workout.workout_date_time}</li>
             <li>Notes: {workout.notes}</li>
         </ul>
+        <p><b>What to Wear:</b></p>
+        <p>{dress.dress_items}</p>
+        </p>
         <p><b>Weather:</b></p>
         <ul>
             <li>Temperature: {forecast.temp}</li>
