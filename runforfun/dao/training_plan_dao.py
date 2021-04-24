@@ -3,15 +3,15 @@ from datetime import datetime
 
 class Workout:
 
-    def __init__(self, workoutDateTime, distance, duration, notes):
-        self.workoutDateTime = workoutDateTime
+    def __init__(self, workout_date_time, distance, duration, notes):
+        self.workout_date_time = workout_date_time
         self.distance = distance
         self.duration = duration
         self.notes = notes
 
     def info(self):
         return {
-            'workoutDateTime': self.workoutDateTime,
+            'workout_date_time': self.workout_date_time,
             'distance': self.distance,
             'duration': self.duration,
             'notes': self.notes
