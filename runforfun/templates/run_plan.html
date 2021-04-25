@@ -16,7 +16,7 @@
         <li>SuggestedRoute(s):</li>
             <ul>
                 {% for route in routes %}
-                  <li><a href="{{ route.name }}">{{route.name}} ({{route.distance}} miles)</a></li>
+                  <li><a href="{{route.url}}">{{route.name}} ({{route.distance}} miles)</a></li>
                 {% endfor %}
             </ul>
         {% endif %}
