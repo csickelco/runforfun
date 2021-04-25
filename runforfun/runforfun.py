@@ -8,17 +8,18 @@ from dao import training_plan_dao
 from dao import dress_my_run_dao
 from dao import routes_dao
 
-if len(sys.argv) < 8:
-    print("Usage: python3 runforfun/runforfun.py {send_email_address} {receiver_email} {password} {trainingPlan} {dressRules} {routes} {weatherAPIKey}")
+if len(sys.argv) < 6:
+    print("Usage: python3 runforfun/runforfun.py {send_email_address} {receiver_email} {password} {weatherAPIKey} {user_config_path}")
     sys.exit(0)
 
 sender_email = sys.argv[1]
 receiver_email = sys.argv[2]
 password = sys.argv[3]
-training_plan = sys.argv[4]
-dress_rules = sys.argv[5]
-routes = sys.argv[6]
-weather_api_key = sys.argv[7]
+weather_api_key = sys.argv[4]
+user_config = sys.argv[5]
+training_plan = f'../config/users/{user_config}/training_plan.csv'
+dress_rules = f'../config/users/{user_config}/dress_rules.csv'
+routes = f'../config/users/{user_config}/routes.csv'
 
 latitude = "43.161030"
 longitude = "-77.610924"
