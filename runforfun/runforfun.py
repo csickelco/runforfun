@@ -1,11 +1,12 @@
 import sys
+import datetime
 from util import emailer
+from util import template_engine
 from api import sunrise_sunset
 from api import weather
 from dao import training_plan_dao
 from dao import dress_my_run_dao
 from dao import routes_dao
-import datetime
 
 if len(sys.argv) < 8:
     print("Usage: python3 runforfun/runforfun.py {send_email_address} {receiver_email} {password} {trainingPlan} {dressRules} {routes} {weatherAPIKey}")
@@ -24,7 +25,7 @@ longitude = "-77.610924"
 
 print("Running for runforfun...")
 
-sunriseSunset = sunrise_sunset.get_sunrise_sunset()
+plan_sunrise_sunset = sunrise_sunset.get_sunrise_sunset()
 tomorrow = datetime.date.today() + datetime.timedelta(days=1)
 workout = training_plan_dao.get_workout_for_date(training_plan, tomorrow)
 
@@ -35,44 +36,7 @@ else:
     dress = dress_my_run_dao.get_dress_for_weather(dress_rules, forecast.temp)
     routes = routes_dao.get_suggested_routes(routes, workout.distance)
 
-    # Create the plain-text and HTML version of your message
-    text = """\
-    This is your run reminder from runforfun!"""
-    html = f"""\
-    <html>
-      <body>
-        <p>This is your run reminder from runforfun!</p>
-        <p><b>What to Run:</b></p>
-        <ul>
-            <li>Distance: {workout.distance} miles</li>
-            <li>Duration: {workout.duration} minutes</li>
-            <li>Time: {workout.workout_date_time}</li>
-            <li>Notes: {workout.notes}</li>
-            <li>Route(s): <a href="{routes[0].name}">{routes[0].name} ({routes[0].distance} miles)</a>
-        </ul>
-        <p><b>What to Wear:</b></p>
-        <p>{dress.dress_items}</p>
-        </p>
-        <p><b>Weather:</b></p>
-        <ul>
-            <li>Temperature: {forecast.temp}</li>
-            <li>Feels Like Temperature: {forecast.feels_like}</li>
-            <li>Wind Speed: {forecast.wind_speed}</li>
-            <li>Wind Gust: {forecast.wind_gust}</li>
-            <li>Precipitation Probability: {forecast.precipitation_probability}</li>
-            <li>Description: {forecast.weather[0].description}</li>
-            <li>Icon: {forecast.weather[0].icon}</li>
-        </ul>
-        <b>Sunrise/Sunset:</b>
-        <ul>
-            <li>Sunrise: {sunriseSunset.sunrise}</li>
-            <li>Sunset: {sunriseSunset.sunset}</li>
-            <li>Twilight Begin: {sunriseSunset.civilTwilightBegin}</li>
-            <li>Twilight End: {sunriseSunset.civilTwilightEnd}</li>
-        </ul>
-      </body>
-    </html>
-    """
-    emailer.send_email(sender_email, receiver_email, password, "Run Reminder", text, html)
+    html = template_engine.render_run_plan(workout, routes, plan_sunrise_sunset, forecast, dress)
+    emailer.send_email(sender_email, receiver_email, password, "Run Reminder", 'Run For Fun Plan"', html)
 
 print("Successfully completed runforfun")

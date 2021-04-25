@@ -1,0 +1,33 @@
+<html>
+  <body>
+    <p>This is your run reminder from runforfun!</p>
+    <p><b>What to Run:</b></p>
+    <ul>
+        <li>Distance: {{workout.distance}} miles</li>
+        <li>Duration: {{workout.duration}} minutes</li>
+        <li>Time: {{workout.workout_date_time}}</li>
+        <li>Notes: {{workout.notes}}</li>
+        <li>Route(s): <a href="{routes[0].name}">{{routes[0].name}} ({{routes[0].distance}} miles)</a>
+    </ul>
+    <p><b>What to Wear:</b></p>
+    <p>{{dress.dress_items}}</p>
+    </p>
+    <p><b>Weather:</b></p>
+    <ul>
+        <li>Temperature: {{forecast.temp}}</li>
+        <li>Feels Like Temperature: {{forecast.feels_like}}</li>
+        <li>Wind Speed: {{forecast.wind_speed}}</li>
+        <li>Wind Gust: {{forecast.wind_gust}}</li>
+        <li>Precipitation Probability: {{forecast.precipitation_probability}}</li>
+        <li>Description: {{forecast.weather[0].description}}</li>
+        <li>Icon: {{forecast.weather[0].icon}}</li>
+    </ul>
+    <b>Sunrise/Sunset:</b>
+    <ul>
+        <li>Sunrise: {{sunrise_sunset.sunrise}}</li>
+        <li>Sunset: {{sunrise_sunset.sunset}}</li>
+        <li>Twilight Begin: {{sunrise_sunset.civilTwilightBegin}}</li>
+        <li>Twilight End: {{sunrise_sunset.civilTwilightEnd}}</li>
+    </ul>
+  </body>
+</html>
