@@ -3,16 +3,32 @@
     <p>This is your run reminder from runforfun!</p>
     <p><b>What to Run:</b></p>
     <ul>
-        <li>Distance: {{workout.distance}} miles</li>
-        <li>Duration: {{workout.duration}} minutes</li>
-        <li>Time: {{workout.workout_date_time}}</li>
-        <li>Notes: {{workout.notes}}</li>
-        <li>Route(s): <a href="{routes[0].name}">{{routes[0].name}} ({{routes[0].distance}} miles)</a>
+        <li>Workout StartTime: {{workout.workout_date_time}}</li>
+        {% if workout.distance is not none %}
+            <li>Distance: {{workout.distance}} miles
+        {% endif %}
+        {% if workout.duration is not none %}
+            <li>Duration: {{workout.duration}} minutes
+        {% endif %}
+        {% if workout.notes is not none %} ( {{workout.notes}} ) {% endif %}
+        </li>
+        {% if routes is not none and routes|length > 0 %}
+        <li>SuggestedRoute(s):</li>
+            <ul>
+                {% for route in routes %}
+                  <li><a href="{{ route.name }}">{{route.name}} ({{route.distance}} miles)</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </ul>
     <p><b>What to Wear:</b></p>
-    <p>{{dress.dress_items}}</p>
-    </p>
+    <ul>
+        {% for dress_item in dress.dress_items %}
+            <li>{{dress_item}}</li>
+        {% endfor %}
+    </ul>
     <p><b>Weather:</b></p>
+    <img src="http://openweathermap.org/img/wn/{{forecast.weather[0].icon}}@2x.png">
     <ul>
         <li>Temperature: {{forecast.temp}}</li>
         <li>Feels Like Temperature: {{forecast.feels_like}}</li>
@@ -20,14 +36,13 @@
         <li>Wind Gust: {{forecast.wind_gust}}</li>
         <li>Precipitation Probability: {{forecast.precipitation_probability}}</li>
         <li>Description: {{forecast.weather[0].description}}</li>
-        <li>Icon: {{forecast.weather[0].icon}}</li>
     </ul>
     <b>Sunrise/Sunset:</b>
     <ul>
-        <li>Sunrise: {{sunrise_sunset.sunrise}}</li>
-        <li>Sunset: {{sunrise_sunset.sunset}}</li>
-        <li>Twilight Begin: {{sunrise_sunset.civilTwilightBegin}}</li>
-        <li>Twilight End: {{sunrise_sunset.civilTwilightEnd}}</li>
+        <li>Sunrise: {{sunrise_sunset.sunrise.strftime("%I:%M %p")}}</li>
+        <li>Sunset: {{sunrise_sunset.sunset.strftime("%I:%M %p")}}</li>
+        <li>Twilight Begin: {{sunrise_sunset.civilTwilightBegin.strftime("%I:%M %p")}}</li>
+        <li>Twilight End: {{sunrise_sunset.civilTwilightEnd.strftime("%I:%M %p")}}</li>
     </ul>
   </body>
 </html>
