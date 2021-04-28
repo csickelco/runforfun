@@ -29,7 +29,6 @@ def get_sunrise_sunset(latitude, longitude, date_val):
     to_zone = tz.gettz('America/New_York')
 
     call_params = {'lat': latitude, 'lng': longitude, 'date': date_val, 'formatted': 0}
-    print(call_params)
 
     # sending get request and saving the response as response object
     r = requests.get(url=URL, params=call_params)
